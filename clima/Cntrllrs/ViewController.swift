@@ -49,6 +49,7 @@ class ViewController: UIViewController {
         }
         else{
             print("empty field no reuest has been sent")
+            resultLbl.text = "Please enter a valid city"
         }
     }
     
@@ -80,15 +81,59 @@ class ViewController: UIViewController {
         print("\nlat----->>>>", lat)
         print("\nlng----->>>>", long)
         
+        
+        //https://darksky.net/dev/docs
         forecastClient?.units = .auto
         forecastClient?.language = .english
         
-        forecastClient?.getForecast(latitude: Double(lat), longitude: long, excludeFields: [.alerts, .currently, .daily, .flags, .minutely]) { result in
+        forecastClient?.getForecast(latitude: Double(lat), longitude: long, excludeFields: [.alerts, .daily, .flags, .minutely]) { result in
             switch result {
+                
             case .success(let forecast, let requestMetadata):
                 print("success")
-               // print(forecast.hourly!.data)
-                //print(requestMetadata)
+                print("--------------------------------------------------")
+               
+               
+               
+                    //print(dataReceived)
+                   // print(dataReceived.summary)
+                
+                DispatchQueue.main.async{
+                    
+                    guard let dataReceived = forecast.currently else {
+                        print("No data!")
+                        return }
+                    //resultLbl.text = dataReceived.summary
+                  
+                    let windSpeed = dataReceived.windSpeed?.toString() ?? "No info for wind speed"
+                    let temperature = dataReceived.temperature?.toString() ?? "No info for temperature"
+                    let pressure = dataReceived.pressure?.toString() ?? "No info for pressure"
+                    let humidity = dataReceived.humidity?.toString() ?? "No info for humidity"
+                    let summary = dataReceived.summary ?? "No info for  summary"
+                    
+                    self.resultLbl.text =  self.resultLbl.text! + "Wind speed: \(windSpeed)\n"
+                    
+                    self.resultLbl.text = self.resultLbl.text! + "temperature: \(temperature)\n"
+                    self.resultLbl.text = self.resultLbl.text! + "pressure: \(pressure)\n"
+                    self.resultLbl.text = self.resultLbl.text! + "humidity: \(humidity)\n"
+                    self.resultLbl.text = self.resultLbl.text! + "summary: \(summary)\n"
+                    self.resultLbl.numberOfLines = 0
+                    self.resultLbl.sizeToFit()
+                    
+                    }
+                   //print(forecast.hourly!.data)
+                    //print(requestMetadata)
+                
+    //                print(forecast)
+    //                print(forecast.currently?.summary)
+    //                print(forecast.currently?.windSpeed)
+    //                print(forecast.currently?.temperature)
+    //                print(forecast.currently?.pressure)
+    //                print(forecast.currently?.humidity)
+                
+                print(requestMetadata.responseTime)
+                print("--------------------------------------------------")
+
             case .failure(let error):
                 print("Error in FOrecast Client")
                 print(error)
@@ -118,9 +163,12 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-   
 
+}
 
+extension Double{
+    func toString()-> String {
+        return String(format: "%.1f",self)
+    }
 }
 
