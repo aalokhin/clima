@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  clima
 //
-//  Created by Anastasiia ALOKHINA on 6/27/19.
+//  Created by Anastasiia ALOKHINA on 7/04/19.
 //  Copyright © 2019 Anastasiia ALOKHINA. All rights reserved.
 //
 
@@ -70,10 +70,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.bot = RecastAIClient(token : Client.sharedInstance.recastToken, language: "en")
         self.forecastClient = DarkSkyClient(apiKey: Client.sharedInstance.darkSkySecretKey)
-        
-        
-
-        // Do any additional setup after loading the view, typically from a nib.
+ 
     }
     
     
@@ -112,7 +109,7 @@ class ViewController: UIViewController {
         
         guard let location = response.entities!["location"] as? [[String: Any]] else {
             print("No location found")
-            self.resultLbl.text = "No such location. Please enter a valid one"
+            self.resultLbl.text = "Damn it... No such location. Please enter a valid one"
             self.iconImage.image = UIImage(named: "sad")
             
             return
@@ -127,69 +124,38 @@ class ViewController: UIViewController {
         //https://darksky.net/dev/docs
         forecastClient?.units = .auto
         forecastClient?.language = .english
-        
         forecastClient?.getForecast(latitude: Double(lat), longitude: long, excludeFields: [.alerts, .daily, .flags, .minutely]) { result in
             switch result {
-                
-            case .success(let forecast, let requestMetadata):
+            case .success(let forecast, _):
                 print("success")
-                print("--------------------------------------------------")
-               
-               
-               
-                    //print(dataReceived)
-                   // print(dataReceived.summary)
-                
                 DispatchQueue.main.async{
-                    
                     guard let dataReceived = forecast.currently else {
-                        
+                        self.callErrorWithCustomMessage(message: "No data!")
                         print("No data!")
-                        return }
-                    //resultLbl.text = dataReceived.summary
-                    
+                        return
+                        
+                    }
                     let windSpeed = dataReceived.windSpeed?.toString() ?? "No info for wind speed"
                     let temperature = dataReceived.temperature?.toString() ?? "No info for temperature"
                     let pressure = dataReceived.pressure?.toString() ?? "No info for pressure"
                     let humidity = dataReceived.humidity?.toString() ?? "No info for humidity"
                     let summary = dataReceived.summary ?? "No info for  summary"
-                    let icon = dataReceived.icon ?? Icon(rawValue: "no icon")
-                    
                     self.resultLbl.text = "Wind speed: \(windSpeed)\n"
-                    
-                    self.resultLbl.text = self.resultLbl.text! + "temperature: \(temperature)\n"
-                    self.resultLbl.text = self.resultLbl.text! + "pressure: \(pressure)\n"
-                    self.resultLbl.text = self.resultLbl.text! + "humidity: \(humidity)\n"
-                    self.resultLbl.text = self.resultLbl.text! + "summary: \(summary)\n"
-                    self.resultLbl.text = self.resultLbl.text! + "icon: \(icon!.rawValue)\n"
-                    
-                    guard let img = icon else {
+                    self.resultLbl.text = self.resultLbl.text! + "Temperature: \(temperature)\n"
+                    self.resultLbl.text = self.resultLbl.text! + "Pressure: \(pressure)\n"
+                    self.resultLbl.text = self.resultLbl.text! + "Humidity: \(humidity)\n"
+                    self.resultLbl.text = self.resultLbl.text! + "Summary: \(summary)\n"
+                    guard let img = dataReceived.icon else {
                         self.iconImage.image = nil
                         return
                     }
                     self.iconImage.image = UIImage(named: img.rawValue)
-                    
-                    
                     self.resultLbl.numberOfLines = 0
                     self.resultLbl.sizeToFit()
-                    
-                    
                     }
-                   //print(forecast.hourly!.data)
-                    //print(requestMetadata)
-                
-    //                print(forecast)
-    //                print(forecast.currently?.summary)
-    //                print(forecast.currently?.windSpeed)
-    //                print(forecast.currently?.temperature)
-    //                print(forecast.currently?.pressure)
-    //                print(forecast.currently?.humidity)
-                
-              //  print(requestMetadata.responseTime)
-                print("--------------------------------------------------")
-
             case .failure(let error):
                 print("Error in FOrecast Client")
+                self.callErrorWithCustomMessage(message: "Error in FOrecast Client")
                 print(error)
             }
         }
@@ -208,6 +174,7 @@ class ViewController: UIViewController {
     func recastRequestError(_ error : Error)
     {
         print("Error : \(error)")
+        self.callErrorWithCustomMessage(message: "Error : \(error)")
     }
     
     
@@ -216,6 +183,17 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func callErrorWithCustomMessage(message : String) {
+        
+        let alert = UIAlertController(
+            title : "Error",
+            message : message,
+            preferredStyle : UIAlertControllerStyle.alert
+        );
+        alert.addAction(UIAlertAction(title: "allright, thank you", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 
 }
