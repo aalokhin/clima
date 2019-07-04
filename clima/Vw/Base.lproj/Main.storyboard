@@ -18,33 +18,53 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4S2-k0-PqM">
-                                <rect key="frame" x="47" y="69" width="281" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4S2-k0-PqM">
+                                <rect key="frame" x="58" y="69" width="256" height="30"/>
                                 <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8qY-1t-uJh">
-                                <rect key="frame" x="56" y="126" width="204" height="28"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8qY-1t-uJh">
+                                <rect key="frame" x="122" y="136" width="131" height="28"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="Qu1-mj-is7"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Get Weather"/>
                                 <connections>
                                     <action selector="getWeather:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tah-uD-MXl"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AGX-P7-f2b">
-                                <rect key="frame" x="47" y="211" width="263" height="104"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lVc-0V-qpM">
+                                <rect key="frame" x="133" y="452" width="109" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="Lnj-Bq-Rg3"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter the location" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AGX-P7-f2b">
+                                <rect key="frame" x="92" y="190" width="189" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4S2-k0-PqM" secondAttribute="trailing" constant="61" id="aFK-On-lw1"/>
+                            <constraint firstItem="8qY-1t-uJh" firstAttribute="top" secondItem="4S2-k0-PqM" secondAttribute="bottom" constant="37" id="dOh-Cw-Vf5"/>
+                            <constraint firstItem="8qY-1t-uJh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dSr-Rr-kv9"/>
+                            <constraint firstItem="lVc-0V-qpM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="133" id="mgr-0r-kEi"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="lVc-0V-qpM" secondAttribute="bottom" constant="87" id="nst-W1-bgN"/>
+                            <constraint firstItem="AGX-P7-f2b" firstAttribute="top" secondItem="8qY-1t-uJh" secondAttribute="bottom" constant="26" id="phT-ag-cws"/>
+                            <constraint firstItem="4S2-k0-PqM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="58" id="rGC-F1-9tn"/>
+                            <constraint firstItem="AGX-P7-f2b" firstAttribute="centerX" secondItem="4S2-k0-PqM" secondAttribute="centerX" id="skb-S6-07X"/>
+                            <constraint firstItem="lVc-0V-qpM" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tDj-fM-f9y"/>
+                            <constraint firstItem="4S2-k0-PqM" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="49" id="vTk-Lo-jRL"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="iconImage" destination="lVc-0V-qpM" id="TDc-s7-xzK"/>
                         <outlet property="requestTextField" destination="4S2-k0-PqM" id="UaU-ds-TgH"/>
                         <outlet property="resultLbl" destination="AGX-P7-f2b" id="oBZ-d1-6hf"/>
                     </connections>

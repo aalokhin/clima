@@ -10,6 +10,44 @@ import UIKit
 import RecastAI
 import ForecastIO
 
+/*
+ so be sure to use a default.
+ public enum Icon: String, Decodable {
+ 
+ /// A clear day.
+ case clearDay = "clear-day"
+ 
+ /// A clear night.
+ case clearNight = "clear-night"
+ 
+ /// A rainy day or night.
+ case rain = "rain"
+ 
+ /// A snowy day or night.
+ case snow = "snow"
+ 
+ /// A sleety day or night.
+ case sleet = "sleet"
+ 
+ /// A windy day or night.
+ case wind = "wind"
+ 
+ /// A foggy day or night.
+ case fog = "fog"
+ 
+ /// A cloudy day or night.
+ case cloudy = "cloudy"
+ 
+ /// A partly cloudy day.
+ case partlyCloudyDay = "partly-cloudy-day"
+ 
+ /// A partly cloudy night.
+ case partlyCloudyNight = "partly-cloudy-night"
+ 
+}
+ 
+ */
+
 
 //https://api.darksky.net/forecast/4cf011576b74af281ea89e4702cf6f10/37.8267,-122.4233
 
@@ -19,6 +57,9 @@ class ViewController: UIViewController {
  
     @IBOutlet weak var resultLbl: UILabel!
     @IBOutlet weak var requestTextField: UITextField!
+    
+    @IBOutlet weak var iconImage: UIImageView!
+    
     
     var bot : RecastAIClient?
     
@@ -71,7 +112,8 @@ class ViewController: UIViewController {
         
         guard let location = response.entities!["location"] as? [[String: Any]] else {
             print("No location found")
-            resultLbl.text = "No such location. Please enter a valid one"
+            self.resultLbl.text = "No such location. Please enter a valid one"
+            self.iconImage.image = UIImage(named: "sad")
             
             return
         }
@@ -101,24 +143,36 @@ class ViewController: UIViewController {
                 DispatchQueue.main.async{
                     
                     guard let dataReceived = forecast.currently else {
+                        
                         print("No data!")
                         return }
                     //resultLbl.text = dataReceived.summary
-                  
+                    
                     let windSpeed = dataReceived.windSpeed?.toString() ?? "No info for wind speed"
                     let temperature = dataReceived.temperature?.toString() ?? "No info for temperature"
                     let pressure = dataReceived.pressure?.toString() ?? "No info for pressure"
                     let humidity = dataReceived.humidity?.toString() ?? "No info for humidity"
                     let summary = dataReceived.summary ?? "No info for  summary"
+                    let icon = dataReceived.icon ?? Icon(rawValue: "no icon")
                     
-                    self.resultLbl.text =  self.resultLbl.text! + "Wind speed: \(windSpeed)\n"
+                    self.resultLbl.text = "Wind speed: \(windSpeed)\n"
                     
                     self.resultLbl.text = self.resultLbl.text! + "temperature: \(temperature)\n"
                     self.resultLbl.text = self.resultLbl.text! + "pressure: \(pressure)\n"
                     self.resultLbl.text = self.resultLbl.text! + "humidity: \(humidity)\n"
                     self.resultLbl.text = self.resultLbl.text! + "summary: \(summary)\n"
+                    self.resultLbl.text = self.resultLbl.text! + "icon: \(icon!.rawValue)\n"
+                    
+                    guard let img = icon else {
+                        self.iconImage.image = nil
+                        return
+                    }
+                    self.iconImage.image = UIImage(named: img.rawValue)
+                    
+                    
                     self.resultLbl.numberOfLines = 0
                     self.resultLbl.sizeToFit()
+                    
                     
                     }
                    //print(forecast.hourly!.data)
@@ -131,7 +185,7 @@ class ViewController: UIViewController {
     //                print(forecast.currently?.pressure)
     //                print(forecast.currently?.humidity)
                 
-                print(requestMetadata.responseTime)
+              //  print(requestMetadata.responseTime)
                 print("--------------------------------------------------")
 
             case .failure(let error):
